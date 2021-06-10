@@ -24,26 +24,24 @@ const thoughtController = {
             })
     },
 
-    addThought({ body }, res) {
-        User.findOne( { _id: body.userId })
-            .then(dbThoughtData => Thought.create(body))
-            .then(({ _id }) => {
-                return User.findOneAndUpdate(
-                    { _id: body.UserId },
-                    { $push: { thoughts: _id } },
-                    { new: true }
-                );
-            })
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
-                    res.status(404).json({ message: 'No user found with this id!' });
-                    return;
-                }
-                res.json(dbThoughtData);
-            })
-            .catch(err => res.json(err));
-    },
-
+    addThought({ params, body }, res) {
+        Thought.create(body)
+          .then(({ _id }) => {
+            return User.findOneAndUpdate(
+              { _id: params.userId },
+              { $push: { thoughts: _id } },
+              { new: true }
+            );
+          })
+          .then(dbThoughtData => {
+            if (!dbThoughtData) {
+              res.status(404).json({ message: 'No user found with this id!' });
+              return;
+            }
+            res.json(dbThoughtData);
+          })
+          .catch(err => res.json(err));
+      },
     // update thought
     updateThought({ params, body }, res) {
         Thought.findOneAndUpdate(
