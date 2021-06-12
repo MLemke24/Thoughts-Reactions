@@ -11,12 +11,12 @@ const {
 } = require('../../controllers/thoughts-controller')
 
 // api/thoughts
-router 
+router
 .route('/')
 .get(getAllThought)
 .post(addThought)
 
-router 
+router
 .route('/:thoughtId')
 .get(getThoughtById)
 .put(updateThought)
